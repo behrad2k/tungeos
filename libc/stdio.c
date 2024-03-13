@@ -123,24 +123,7 @@ int strlen(const char* str)
 }
 // end of borrowing from the bare bones tutorial
 #include <stdarg.h>
-static char* itoa(int i) {
-    if(i == 0) {
-        return "0";
-    }
-    static char output[24];  // 64-bit MAX_INT is 20 digits
-    char* p = &output[23];
-    for(*p--=0;i;i/=10) *p--=i%10+0x30; 
-    return ++p;    
-}
-static char* ltoa(long i) {
-    if(i == 0) {
-        return "0";
-    }
-    static char output[24];  // 64-bit MAX_INT is 20 digits
-    char* p = &output[23];
-    for(*p--=0;i;i/=10) *p--=i%10+0x30; 
-    return ++p;    
-}
+
 int puts(const char *string) {
     x+=strlen(string);
     update_cursor(x,y);
