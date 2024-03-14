@@ -1,11 +1,17 @@
 TARGET = i686-elf
 CC = gcc
-SRC = $(wildcard *.c)
-OBJ = $(patsubst %.c,%.o,$(SRC))
+CFLAGS = -Wall -Iinclude -ffreestanding
 
-all:
-	for i in 1 2 ; do \
-    	$(TARGET)-$(CC) $(word $(shell expr $$i - 0),$(SRC)) -Iinclude -c -o $(word $$i,$(OBJ)) -ffreestanding -Wall -Wextra ; \
-	done
+SRCS := $(wildcard *.c)
 
-	$(TARGET)-$(CC) $(OBJ) -o ../libc.o
+OBJS := $(SRCS:.c=.o)
+
+.PHONY: all clean
+
+all: $(OBJS)
+
+%.o: %.c
+	$(TARGET)-$(CC) $(CFLAGS) -c -o $@ $<
+
+clean:
+	$(RM) $(OBJS)

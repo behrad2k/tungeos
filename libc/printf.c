@@ -31,14 +31,17 @@ static char* ltoa(long i) {
 
 int printf(const char *restrict format, ...) {
 	va_list ap;
-	va_start(format, ap);
+	va_start(ap, format);
 	for (int i = 0; i < strlen(format); i++) {
 		if (format[i] == '%') {
 			if (format[i+1] == 'd') {
 				puts(itoa(va_arg(ap, int)));
 			}
+			else if (format[i+1] == 'l') {
+				puts(ltoa(va_arg(ap, long)));
+			}
 		} else {
-			puts((const char *)format[i]);
+			puts(&format[i]);
 		}
 	}
 	return 0;
