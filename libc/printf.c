@@ -25,15 +25,20 @@ int printf(const char *restrict format, ...) {
 	va_list ap;
 	va_start(ap, format);
 	for (int i = 0; i < strlen(format); i++) {
-		if (format[i] == '%') {
-			if (format[i+1] == 'd') {
-				puts(itoa(va_arg(ap, int)));
+		switch (format[i]) {
+			case ('%'): {
+				switch (format[i+1]) {
+					case ('d'): {
+						puts((const char *)itoa(va_arg(ap, int)));
+					}
+					default: {
+						puts(format[i]);
+					}
+				}
 			}
-			else if (format[i+1] == 'l') {
-				puts(ltoa(va_arg(ap, long)));
+			default: {
+				puts(format[i]);
 			}
-		} else {
-			puts(&format[i]);
 		}
 	}
 	return 0;
