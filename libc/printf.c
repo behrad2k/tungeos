@@ -30,7 +30,8 @@ void printf(const char *restrict format, ...) {
 			case ('%'): {
 				switch (format[i+1]) {
 					case ('d'): {
-						puts((const char *)itoa(va_arg(ap, int)));
+						char *a = itoa(va_arg(ap, int));
+						puts((const char *)a);
 						i+=2;
 						break;
 					}
@@ -58,5 +59,6 @@ void printf(const char *restrict format, ...) {
 				break;
 			}
 		}
+		update_cursor(i, getcursor_y());
 	}
 }

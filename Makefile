@@ -4,7 +4,7 @@ EMU_TARGET = x86_64
 AS = as
 CC = gcc
 LD = gcc
-CFLAGS = -c -std=gnu99 -ffreestanding -O2 -Wall -Ilibc/include
+CFLAGS = -c -std=gnu99 -ffreestanding -O2 -Wall -Ilibc/include -nostdlib -fno-builtin
 FOLDERS = $(w)
 .PHONY: clean
 all: bin iso emu

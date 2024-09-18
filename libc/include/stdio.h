@@ -4,5 +4,8 @@
 void puts(const char *string);
 void putc(const char string);
 void printf(const char *restrict format, ...);
+int getcursor_x();
+int getcursor_y();
 void terminal_initialize();
+void update_cursor(int _x, int _y);
 #endif

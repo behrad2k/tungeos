@@ -1,5 +1,5 @@
 CC := i686-elf-gcc
-CFLAGS := -Wall -O0 -I../libc/include
+CFLAGS := -Wall -O0 -I../libc/include -nostdlib -fno-builtin
 SRCS := $(wildcard *.c) $(wildcard */*.c)
 OBJS := $(SRCS:.c=.o)
 

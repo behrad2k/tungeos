@@ -27,18 +27,27 @@ static inline uint8_t inb(uint16_t port)
                    : "memory");
     return ret;
 }
+
+int x = 0;
+int y = 0;
+
 void update_cursor(int x, int y)
 {
-	uint16_t pos = y * VGA_WIDTH + (x - 1);
- 
+	uint16_t pos = y * VGA_WIDTH + x;
+
 	outb(0x3D4, 0x0F);
 	outb(0x3D5, (uint8_t) (pos & 0xFF));
 	outb(0x3D4, 0x0E);
 	outb(0x3D5, (uint8_t) ((pos >> 8) & 0xFF));
 }
-int x = 0;
-int y = 0;
 
+int getcursor_x() {
+	return x;
+}
+
+int getcursor_y() {
+	return y;
+}
  
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
@@ -124,13 +133,17 @@ int strlen(const char* str)
 // end of borrowing from the bare bones tutorial
 #include <stdarg.h>
 
+int _fakex;
+int _fakey;
+
 void puts(const char *string) {
 	x+=strlen(string);
-	update_cursor(x,y);
+	update_cursor(x+2,y);
 	for (int i = 0; i < strlen(string); i++) {
 		if (string[i] == '\n') {
 			terminal_row++;
-			y++;
+			_fakey++;
+			_fakex = 0;
 			update_cursor(x,y);
 		} else {
 			terminal_putchar(string[i]);
@@ -139,11 +152,11 @@ void puts(const char *string) {
 }
 
 void putc(const char string) {
-	update_cursor(x + 1,y);
 	if (string == '\n') {
 		terminal_row++;
-		y++;
-		update_cursor(x,y);
+		_fakey++;
+		_fakex = 0;
+		update_cursor(x + 1,y);
 	} else {
 		terminal_putchar(string);
 	}
