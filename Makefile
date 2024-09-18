@@ -30,7 +30,7 @@ bin:
 	make
 	cd kernel; \
 	make
-	$(TARGET)-$(LD) -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel/kernel.o libc.o -lgcc
+	$(TARGET)-$(LD) -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot/boot.o kernel/kernel.o libc.o -lgcc
 iso:
 	mkdir -p isodir/boot/grub
 	cp myos.bin isodir/boot/myos.bin

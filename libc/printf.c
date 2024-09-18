@@ -11,6 +11,7 @@ static char* itoa(int i) {
     for(*p--=0;i;i/=10) *p--=i%10+0x30; 
     return ++p;    
 }
+/*
 static char* ltoa(long i) {
     if(i == 0) {
         return "0";
@@ -19,9 +20,9 @@ static char* ltoa(long i) {
     char* p = &output[23];
     for(*p--=0;i;i/=10) *p--=i%10+0x30; 
     return ++p;    
-}
+} */
 
-int printf(const char *restrict format, ...) {
+void printf(const char *restrict format, ...) {
 	va_list ap;
 	va_start(ap, format);
 	for (int i = 0; i < strlen(format); i++) {
@@ -30,16 +31,32 @@ int printf(const char *restrict format, ...) {
 				switch (format[i+1]) {
 					case ('d'): {
 						puts((const char *)itoa(va_arg(ap, int)));
+						i+=2;
+						break;
+					}
+					case ('s'): {
+						puts(va_arg(ap, char*));
+						i+=2;
+						break;
+					}
+					case ('c'): {
+						putc(va_arg(ap, int));
+						i+=2;
+						break;
 					}
 					default: {
-						puts(format[i]);
+						putc(format[i]);
+						i++;
+						break;
 					}
 				}
 			}
 			default: {
-				puts(format[i]);
+				if (format[i] != 0) {
+					putc(format[i]);
+				}
+				break;
 			}
 		}
 	}
-	return 0;
 }

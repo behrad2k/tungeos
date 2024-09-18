@@ -124,9 +124,9 @@ int strlen(const char* str)
 // end of borrowing from the bare bones tutorial
 #include <stdarg.h>
 
-int puts(const char *string) {
-    x+=strlen(string);
-    update_cursor(x,y);
+void puts(const char *string) {
+	x+=strlen(string);
+	update_cursor(x,y);
 	for (int i = 0; i < strlen(string); i++) {
 		if (string[i] == '\n') {
 			terminal_row++;
@@ -136,5 +136,15 @@ int puts(const char *string) {
 			terminal_putchar(string[i]);
 		}
 	}
-	return 0;
+}
+
+void putc(const char string) {
+	update_cursor(x + 1,y);
+	if (string == '\n') {
+		terminal_row++;
+		y++;
+		update_cursor(x,y);
+	} else {
+		terminal_putchar(string);
+	}
 }
