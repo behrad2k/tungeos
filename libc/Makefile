@@ -20,4 +20,4 @@ $(OUT): $(OBJS)
 	$(TARGET)-$(LD) -o $(OUT) $(OBJS) --oformat elf32-i386 -r 
 
 clean:
-	$(RM) $(OBJS)
+	rm -f $(OBJS)

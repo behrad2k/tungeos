@@ -5,23 +5,32 @@ AS = as
 CC = gcc
 LD = gcc
 CFLAGS = -c -std=gnu99 -ffreestanding -O2 -Wall -Ilibc/include
+FOLDERS = $(w)
 .PHONY: clean
 all: bin iso emu
 
-ifeq (, $(shell which i686-elf-gcc))
-$(error "get i686-elf-gcc")
+ifeq (, $(shell which $(TARGET)-$(CC)))
+$(error "get $(TARGET)-$(CC)")
 endif
 
 
 clean:
+	cd boot; \
+	make clean
+	cd libc; \
+	make clean
+	cd kernel; \
+	make clean
 	rm -f $(wildcard *.o *.iso *.bin)
 	rm -rf isodir
 bin:
-	$(TARGET)-$(AS) boot/boot.s -o boot.o
-	$(TARGET)-$(CC) $(CFLAGS) kernel.c -o kernel.o
+	cd boot; \
+	make
 	cd libc; \
 	make
-	$(TARGET)-$(LD) -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o libc.o -lgcc
+	cd kernel; \
+	make
+	$(TARGET)-$(LD) -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel/kernel.o libc.o -lgcc
 iso:
 	mkdir -p isodir/boot/grub
 	cp myos.bin isodir/boot/myos.bin
