@@ -8,4 +8,5 @@ int getcursor_x();
 int getcursor_y();
 void terminal_initialize();
 void update_cursor(int _x, int _y);
+int strlen(const char* str);
 #endif

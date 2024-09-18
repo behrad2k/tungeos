@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-
 static char* itoa(int i) {
     if(i == 0) {
         return "0";
@@ -59,6 +58,5 @@ void printf(const char *restrict format, ...) {
 				break;
 			}
 		}
-		update_cursor(i, getcursor_y());
 	}
 }

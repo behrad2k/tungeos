@@ -1,12 +1,14 @@
-
-
 #include <stdio.h>
-
-
 // borrowed from the bare bones tutorial
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+
+ 
+size_t terminal_row;
+size_t terminal_column;
+uint8_t terminal_color;
+uint16_t* terminal_buffer;
  
 static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
@@ -34,7 +36,8 @@ int y = 0;
 void update_cursor(int x, int y)
 {
 	uint16_t pos = y * VGA_WIDTH + x;
-
+	terminal_row = y;
+	terminal_column = x;
 	outb(0x3D4, 0x0F);
 	outb(0x3D5, (uint8_t) (pos & 0xFF));
 	outb(0x3D4, 0x0E);
@@ -87,12 +90,6 @@ static inline uint16_t vga_entry(unsigned char uc, uint8_t color)
 {
 	return (uint16_t) uc | (uint16_t) color << 8;
 }
- 
-size_t terminal_row;
-size_t terminal_column;
-uint8_t terminal_color;
-uint16_t* terminal_buffer;
- 
 void terminal_initialize(void) 
 {
 	terminal_row = 0;
@@ -133,17 +130,14 @@ int strlen(const char* str)
 // end of borrowing from the bare bones tutorial
 #include <stdarg.h>
 
-int _fakex;
-int _fakey;
-
 void puts(const char *string) {
 	x+=strlen(string);
-	update_cursor(x+2,y);
+	update_cursor(x,y);
 	for (int i = 0; i < strlen(string); i++) {
 		if (string[i] == '\n') {
 			terminal_row++;
-			_fakey++;
-			_fakex = 0;
+			y++;
+
 			update_cursor(x,y);
 		} else {
 			terminal_putchar(string[i]);
@@ -154,9 +148,13 @@ void puts(const char *string) {
 void putc(const char string) {
 	if (string == '\n') {
 		terminal_row++;
-		_fakey++;
-		_fakex = 0;
-		update_cursor(x + 1,y);
+		y++;
+		update_cursor(x, y);
+	} else if (string == '\t') {
+		terminal_putchar(' ');
+		terminal_putchar(' ');
+		terminal_putchar(' ');
+		terminal_putchar(' ');
 	} else {
 		terminal_putchar(string);
 	}
